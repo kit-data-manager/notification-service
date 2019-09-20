@@ -17,7 +17,7 @@ package edu.kit.datamanager.notification.web.impl;
 
 import edu.kit.datamanager.notification.dao.INotificationDao;
 import edu.kit.datamanager.notification.dao.spec.NotificationCreationDateSpec;
-import edu.kit.datamanager.notification.dao.spec.NotificationReadSpec;
+import edu.kit.datamanager.notification.dao.spec.NotificationRecognizedSpec;
 import edu.kit.datamanager.notification.dao.spec.NotificationReceipientIdSpec;
 import edu.kit.datamanager.notification.dao.spec.NotificationSenderIdSpec;
 import edu.kit.datamanager.notification.dao.spec.NotificationSenderTypeSpec;
@@ -157,7 +157,7 @@ public class NotificationController implements INotificationController{
     Specification<Notification> querySpec = NotificationReceipientIdSpec.toSpecification(notification.getReceipientId(), true).
             and(NotificationSenderIdSpec.toSpecification(notification.getSenderId(), true)).
             and(NotificationSenderTypeSpec.toSpecification(notification.getSenderType())).
-            and(NotificationSeveritySpec.toSpecification(notification.getSeverity())).and(NotificationReadSpec.toSpecification(notification.getRecognized())).
+            and(NotificationSeveritySpec.toSpecification(notification.getSeverity())).and(NotificationRecognizedSpec.toSpecification(notification.getRecognized())).
             and(NotificationCreationDateSpec.toSpecification(createdFrom, createdUntil));
 
     LOG.trace("Querying for result list.");
@@ -171,11 +171,11 @@ public class NotificationController implements INotificationController{
   }
 
   @Override
-  public ResponseEntity<Notification> setNotificationRead(
+  public ResponseEntity<Notification> setNotificationRecognized(
           @ApiParam(value = "Identifier for the notification", required = true) @PathVariable("id") String id,
           @ApiParam(value = "New value for recognized (either true or false).", required = true, defaultValue = "TRUE") @Valid @RequestBody Boolean status
   ){
-    LOG.trace("Calling setNotificationRead({}, {}).", id, status);
+    LOG.trace("Calling setNotificationRecognized({}, {}).", id, status);
 
     Optional<Notification> result = notificationDao.findById(Long.parseLong(id));
 

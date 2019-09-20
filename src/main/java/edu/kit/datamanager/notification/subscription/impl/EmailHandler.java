@@ -21,6 +21,7 @@ import edu.kit.datamanager.notification.domain.Subscription;
 import edu.kit.datamanager.notification.subscription.ISubscriptionHandler;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -41,7 +42,7 @@ public class EmailHandler implements ISubscriptionHandler{
 
   @Autowired
   private Logger LOG;
-  @Autowired
+  @Autowired(required = false)
   public JavaMailSender emailSender;
 
   public final static String EMAIL_KEY = "email";
@@ -63,6 +64,11 @@ public class EmailHandler implements ISubscriptionHandler{
 
   @Override
   public boolean checkSubscription(Subscription subscription){
+
+    if(Objects.isNull(emailSender)){
+      LOG.warn("No email sender bean injected. Handler will be ignored.");
+      return false;
+    }
     try{
       Map<String, String> props = subscription.getSubscriptionPropertiesAsMap();
       if(!props.containsKey(EMAIL_KEY) || !props.containsKey(DETAILS_KEY)){

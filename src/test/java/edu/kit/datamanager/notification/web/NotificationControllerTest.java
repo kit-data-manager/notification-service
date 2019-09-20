@@ -163,45 +163,45 @@ public class NotificationControllerTest{
   }
 
   @Test
-  public void testSetNotificationRead() throws Exception{
+  public void testSetNotificationRecognized() throws Exception{
     Notification n1 = NotificationTestUtil.createNotification(Notification.SEVERITY.ERROR, "This is an error.");
     n1 = dao.save(n1);
 
     ObjectMapper map = new ObjectMapper();
-    MvcResult result = this.mockMvc.perform(put("/api/v1/notifications/" + n1.getId() + "/read").content(map.writeValueAsBytes(Boolean.TRUE.toString())).contentType(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isOk()).andReturn();
+    MvcResult result = this.mockMvc.perform(put("/api/v1/notifications/" + n1.getId() + "/recognized").content(map.writeValueAsBytes(Boolean.TRUE.toString())).contentType(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isOk()).andReturn();
 
     Notification res = map.readValue(result.getResponse().getContentAsString(), Notification.class);
     Assert.assertNotNull(res);
-    Assert.assertTrue(res.getRead());
+    Assert.assertTrue(res.getRecognized());
   }
 
   @Test
-  public void testSetNotificationReadWithoutBody() throws Exception{
-    this.mockMvc.perform(put("/api/v1/notifications/666/read").contentType(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isBadRequest()).andReturn();
+  public void testSetNotificationRecognizedWithoutBody() throws Exception{
+    this.mockMvc.perform(put("/api/v1/notifications/666/recognized").contentType(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isBadRequest()).andReturn();
   }
 
   @Test
-  public void testSetNotificationReadWithInvalidNotification() throws Exception{
+  public void testSetNotificationRecognizedWithInvalidNotification() throws Exception{
     ObjectMapper map = new ObjectMapper();
-    MvcResult result = this.mockMvc.perform(put("/api/v1/notifications/666/read").content(map.writeValueAsBytes(Boolean.TRUE.toString())).contentType(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isNotFound()).andReturn();
+    MvcResult result = this.mockMvc.perform(put("/api/v1/notifications/666/recognized").content(map.writeValueAsBytes(Boolean.TRUE.toString())).contentType(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isNotFound()).andReturn();
   }
 
   @Test
-  public void testSetNotificationReadTwice() throws Exception{
+  public void testSetNotificationRecognizedTwice() throws Exception{
     Notification n1 = NotificationTestUtil.createNotification(Notification.SEVERITY.ERROR, "This is an error.");
     n1 = dao.save(n1);
 
     ObjectMapper map = new ObjectMapper();
-    MvcResult result = this.mockMvc.perform(put("/api/v1/notifications/" + n1.getId() + "/read").content(map.writeValueAsBytes(Boolean.TRUE.toString())).contentType(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isOk()).andReturn();
+    MvcResult result = this.mockMvc.perform(put("/api/v1/notifications/" + n1.getId() + "/recognized").content(map.writeValueAsBytes(Boolean.TRUE.toString())).contentType(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isOk()).andReturn();
 
     Notification res = map.readValue(result.getResponse().getContentAsString(), Notification.class);
     Assert.assertNotNull(res);
-    Assert.assertTrue(res.getRead());
+    Assert.assertTrue(res.getRecognized());
 
-    result = this.mockMvc.perform(put("/api/v1/notifications/" + n1.getId() + "/read").content(map.writeValueAsBytes(Boolean.TRUE.toString())).contentType(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isOk()).andReturn();
+    result = this.mockMvc.perform(put("/api/v1/notifications/" + n1.getId() + "/recognized").content(map.writeValueAsBytes(Boolean.TRUE.toString())).contentType(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isOk()).andReturn();
     res = map.readValue(result.getResponse().getContentAsString(), Notification.class);
     Assert.assertNotNull(res);
-    Assert.assertTrue(res.getRead());
+    Assert.assertTrue(res.getRecognized());
   }
 
   @Test
@@ -221,21 +221,21 @@ public class NotificationControllerTest{
   public void testFindByExample() throws Exception{
     Notification n1 = NotificationTestUtil.createNotification(Notification.SEVERITY.ERROR, "This is an error.");
     n1.setReceipientId("me");
-    n1.setRead(true);
+    n1.setRecognized(true);
     n1.setSenderId("me");
     n1.setSenderType(Notification.SENDER_TYPE.USER);
     n1 = dao.save(n1);
 
     Notification n2 = NotificationTestUtil.createNotification(Notification.SEVERITY.ERROR, "This is an error.");
     n2.setReceipientId("not_me");
-    n2.setRead(false);
+    n2.setRecognized(false);
     n2.setSenderId("not_me");
     n2.setSenderType(Notification.SENDER_TYPE.SYSTEM);
     n2 = dao.save(n2);
 
     Notification n3 = NotificationTestUtil.createNotification(Notification.SEVERITY.INFO, "This is an info.");
     n3.setReceipientId("not_me");
-    n3.setRead(false);
+    n3.setRecognized(false);
     n3.setSenderId("not_me");
     n3.setSenderType(Notification.SENDER_TYPE.SYSTEM);
     n3 = dao.save(n3);
@@ -244,7 +244,7 @@ public class NotificationControllerTest{
 
     Notification template = new Notification();
     template.setSeverity(Notification.SEVERITY.ERROR);
-    template.setRead(null);
+    template.setRecognized(null);
     MvcResult result = this.mockMvc.perform(post("/api/v1/notifications/search").content(map.writeValueAsBytes(template)).contentType(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isOk()).andReturn();
     Notification[] res = map.readValue(result.getResponse().getContentAsString(), Notification[].class);
 
@@ -254,7 +254,7 @@ public class NotificationControllerTest{
     Assert.assertEquals(Notification.SEVERITY.ERROR, res[1].getSeverity());
 
     template.setReceipientId("me");
-    template.setRead(Boolean.TRUE);
+    template.setRecognized(Boolean.TRUE);
     template.setSenderId("me");
     template.setSenderType(Notification.SENDER_TYPE.USER);
 

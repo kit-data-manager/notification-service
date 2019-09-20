@@ -77,18 +77,18 @@ public interface INotificationController{
           HttpServletResponse hsr,
           UriComponentsBuilder ucb);
 
-  @ApiOperation(value = "Update the read status of a notification.", notes = "")
+  @ApiOperation(value = "Update the recognized status of a notification.", notes = "")
   @ApiResponses(value = {
     @ApiResponse(code = 200, message = "Successful update. The updated notification is returned in the response.", response = Notification.class),
     @ApiResponse(code = 401, message = "Unauthorized. Request was not authorized.", response = Error.class),
     @ApiResponse(code = 403, message = "Forbidden. May be returned, for example, if the caller has no sufficient privileges."),
     @ApiResponse(code = 404, message = "Not found. The notification was not found.")})
-  @RequestMapping(value = "/{id}/read",
+  @RequestMapping(value = "/{id}/recognized",
           produces = {"application/json"},
           method = RequestMethod.PUT)
-  ResponseEntity<Notification> setNotificationRead(
+  ResponseEntity<Notification> setNotificationRecognized(
           @ApiParam(value = "Identifier for the notification", required = true) @PathVariable("id") String id,
-          @ApiParam(value = "New value for read (either true or false).", required = true) @Valid @RequestBody Boolean status);
+          @ApiParam(value = "New value for recognized (either true or false).", required = true) @Valid @RequestBody Boolean status);
 
   @ApiOperation(value = "Delete a resource by id.", notes = "Delete a single resource. Deleting a resource typically requires the caller to have ADMIN permissions. In some cases, deleting a resource can also be available for the owner or other privileged users or can be forbidden. For resources whose deletion may affect other resources or internal workflows, physical deletion might not be possible at all. In those cases, the resource might be disabled/hidden but not removed from the database. This can then happen optionally at a later point in time, either automatically or manually.")
   @RequestMapping(value = {"/{id}"}, method = {RequestMethod.DELETE})

@@ -25,9 +25,9 @@ import org.springframework.data.jpa.domain.Specification;
  *
  * @author jejkal
  */
-public class NotificationReadSpec{
+public class NotificationRecognizedSpec{
 
-  private NotificationReadSpec(){
+  private NotificationRecognizedSpec(){
   }
 
   public static Specification<Notification> toSpecification(final Boolean read){
@@ -37,7 +37,7 @@ public class NotificationReadSpec{
     }
 
     return (Root<Notification> root, CriteriaQuery<?> query, CriteriaBuilder builder) -> {
-      return builder.equal(root.get("read"), read);
+      return builder.equal(root.get("recognized"), read);
 
     };
   }
