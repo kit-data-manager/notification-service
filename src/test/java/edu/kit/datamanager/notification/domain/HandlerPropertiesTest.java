@@ -15,36 +15,26 @@
  */
 package edu.kit.datamanager.notification.domain;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  *
  * @author jejkal
  */
-public class HandlerProperties{
+public class HandlerPropertiesTest{
 
-  private final Map<String, String> properties = new HashMap<>();
+  @Test
+  public void testHandlerProperties(){
+    HandlerProperties props = HandlerProperties.create();
+    props.addProperty("key", "value");
+    Assert.assertEquals(1, props.getKeys().size());
+    Assert.assertEquals("key", props.getKeys().toArray(new String[]{})[0]);
+    Assert.assertEquals("value", props.getDescription("key"));
 
-  HandlerProperties(){
+    props = props.addProperty("key", "newValue");
+    Assert.assertEquals(1, props.getKeys().size());
+    Assert.assertEquals("key", props.getKeys().toArray(new String[]{})[0]);
+    Assert.assertEquals("newValue", props.getDescription("key"));
   }
-
-  public static HandlerProperties create(){
-    return new HandlerProperties();
-  }
-
-  public HandlerProperties addProperty(String key, String description){
-    properties.put(key, description);
-    return this;
-  }
-
-  public Set<String> getKeys(){
-    return properties.keySet();
-  }
-
-  public String getDescription(String key){
-    return properties.get(key);
-  }
-
 }

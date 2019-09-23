@@ -24,6 +24,7 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -34,8 +35,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class NotificationMessageHandler implements IMessageHandler{
 
-  @Autowired
-  private Logger LOG;
+  private Logger logger = LoggerFactory.getLogger(NotificationMessageHandler.class);
 
   @Autowired
   private final INotificationDao notificationDao;
@@ -51,7 +51,7 @@ public class NotificationMessageHandler implements IMessageHandler{
 
   @Override
   public RESULT handle(BasicMessage message){
-    LOG.trace("Reconstructing notification from message {}.", message);
+    logger.trace("Reconstructing notification from message {}.", message);
     Notification n = new Notification();
     n.setContent(message.getMetadata().get(NotificationMessage.CONTENT_KEY));
     n.setCreatedAt(Instant.ofEpochMilli(message.getTimestamp()));
@@ -61,7 +61,7 @@ public class NotificationMessageHandler implements IMessageHandler{
     n.setSenderId(message.getSender());
     n.setSenderType(Notification.SENDER_TYPE.valueOf(message.getMetadata().get(NotificationMessage.SENDER_TYPE_KEY)));
     n.setSeverity(Notification.SEVERITY.valueOf(message.getMetadata().get(NotificationMessage.SEVERITY_KEY)));
-    LOG.trace("Persisting notification {}.", n);
+    logger.trace("Persisting notification {}.", n);
     notificationDao.save(n);
     return RESULT.SUCCEEDED;
   }
