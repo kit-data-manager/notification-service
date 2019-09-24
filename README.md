@@ -18,7 +18,7 @@ In order to build the Notification Service you'll need:
 After obtaining the sources change to the folder where the sources are located perform the following steps:
 
 ```
-user@localhost:/home/user/notification-service$ ./gradlew -Prelease build
+user@localhost:/home/user/notification-service$ ./gradlew -Pclean-release build
 > Configure project :
 Using release profile for building notification-service
 <-------------> 0% EXECUTING [0s]
