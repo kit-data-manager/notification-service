@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 
 
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-07-09T15:21:24.632+02:00")
@@ -15,7 +15,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @ComponentScan(basePackages = "edu.kit.datamanager")
 @EnableWebMvc
-@EnableSwagger2 //Loads the spring beans required by the framework
+@EnableSwagger2WebMvc //Loads the spring beans required by the framework
 @PropertySource("classpath:swagger.properties")
 @Import(SwaggerDocumentationConfig.class)
 public class SwaggerUiConfiguration extends WebMvcConfigurerAdapter {

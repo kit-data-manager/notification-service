@@ -15,10 +15,15 @@
  */
 package edu.kit.datamanager.notification.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import edu.kit.datamanager.util.json.CustomInstantDeserializer;
+import edu.kit.datamanager.util.json.CustomInstantSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
@@ -63,8 +68,14 @@ public class Subscription implements Serializable{
   @Enumerated(EnumType.STRING)
   private FREQUENCY frequency;
   @ApiModelProperty(value = "The last timestamp when this subscription was fired sending at least one notification.", required = false)
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
+  @JsonDeserialize(using = CustomInstantDeserializer.class)
+  @JsonSerialize(using = CustomInstantSerializer.class)
   private Instant firedLast;
   @ApiModelProperty(value = "The next timestamp this subscription will fire.", required = false)
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
+  @JsonDeserialize(using = CustomInstantDeserializer.class)
+  @JsonSerialize(using = CustomInstantSerializer.class)
   private Instant firesNext;
   @ApiModelProperty(value = "Flag to disable the subscription, e.g. temporarily.", required = false)
   private Boolean disabled;

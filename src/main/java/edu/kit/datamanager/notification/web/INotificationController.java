@@ -71,8 +71,8 @@ public interface INotificationController{
   @ResponseBody
   public ResponseEntity<List<Notification>> findByExample(
           @ApiParam(value = "Json representation of the resource serving as example for the search operation. Typically, only first level primitive attributes are evaluated while building queries from examples.", required = true) @RequestBody Notification c,
-          @RequestParam(value = "The UTC time of the earliest update of a returned resource.", name = "from", required = false) Instant createdFrom,
-          @RequestParam(value = "The UTC time of the latest update of a returned resource.", name = "until", required = false) Instant createdUntil,
+          @ApiParam(value = "The UTC time of the earliest update of a returned resource.", required = false) @RequestParam(name = "from", required = false) Instant createdFrom,
+          @ApiParam(value = "The UTC time of the latest update of a returned resource.", required = false) @RequestParam(name = "until", required = false) Instant createdUntil,
           Pageable pgbl, WebRequest wr,
           HttpServletResponse hsr,
           UriComponentsBuilder ucb);

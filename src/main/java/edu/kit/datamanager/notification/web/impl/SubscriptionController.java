@@ -26,6 +26,7 @@ import io.swagger.annotations.ApiParam;
 import java.io.IOException;
 import java.net.URI;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +36,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.hateoas.mvc.ControllerLinkBuilder;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -101,7 +102,7 @@ public class SubscriptionController implements ISubscriptionController{
       return new ResponseEntity("Mandatory attribute receipientId is missing.", HttpStatus.BAD_REQUEST);
     }
 
-    if(selectedHandler.checkSubscription(subscription)){
+    if(!selectedHandler.checkSubscription(subscription)){
       return new ResponseEntity("Missing or invalid attribute in subscription properties.", HttpStatus.BAD_REQUEST);
     }
 
@@ -111,6 +112,10 @@ public class SubscriptionController implements ISubscriptionController{
     }
 
     subscription.setId(null);
+    if(subscription.getDisabled() == null){
+      LOG.trace("No disabled flag provided, setting default value {}.", Boolean.FALSE);
+      subscription.setDisabled(Boolean.FALSE);
+    }
     //setting firedLast and firesNext in order not to send all old notifications in the first cycle
     subscription.setFiredLast(Instant.now());
     subscription.setFiresNext(Instant.now());
@@ -118,7 +123,7 @@ public class SubscriptionController implements ISubscriptionController{
     LOG.trace("Persisting new subscription.");
     subscription = subscriptionDao.save(subscription);
     LOG.trace("Returning persisted subscription.");
-    String uriLink = ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(this.getClass()).getById(Long.toString(subscription.getId()), 1l, request, response)).toString();
+    String uriLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getById(Long.toString(subscription.getId()), 1l, request, response)).toString();
     LOG.trace("Created resource link is: {}", uriLink);
     return ResponseEntity.created(URI.create(uriLink)).body(subscription);
   }
@@ -181,6 +186,7 @@ public class SubscriptionController implements ISubscriptionController{
     }
 
     Subscription foundSubscription = result.get();
+    LOG.trace("Updating frequency.");
     foundSubscription.setFrequency((subscription.getFrequency() != null) ? subscription.getFrequency() : foundSubscription.getFrequency());
 
     String name = subscription.getSubscriptionName();
@@ -197,14 +203,18 @@ public class SubscriptionController implements ISubscriptionController{
         return new ResponseEntity("Invalid subscription handler " + name + " provided.", HttpStatus.BAD_REQUEST);
       }
 
+      LOG.trace("Updating subscription name.");
       foundSubscription.setSubscriptionName(name);
+      LOG.trace("Updating subscription properties.");
       foundSubscription.setSubscriptionProperties((subscription.getSubscriptionProperties() != null) ? subscription.getSubscriptionProperties() : foundSubscription.getSubscriptionProperties());
 
-      if(selectedHandler.checkSubscription(subscription)){
+      if(!selectedHandler.checkSubscription(subscription)){
         return new ResponseEntity("Missing or invalid attribute in subscription properties.", HttpStatus.BAD_REQUEST);
       }
     }
-
+    LOG.trace("Updating receipient.");
+    foundSubscription.setReceipientId((subscription.getReceipientId() != null) ? subscription.getReceipientId() : foundSubscription.getReceipientId());
+    LOG.trace("Updating disabled flag.");
     foundSubscription.setDisabled((subscription.getDisabled() != null) ? subscription.getDisabled() : foundSubscription.getDisabled());
     foundSubscription = subscriptionDao.save(foundSubscription);
 
@@ -232,12 +242,15 @@ public class SubscriptionController implements ISubscriptionController{
   }
 
   @Override
-  public ResponseEntity<Map<String, HandlerProperties>> getSubscriptionHandlerNamesAndProperties(){
+  public ResponseEntity getSubscriptionHandlerNamesAndProperties(){
 
-    Map<String, HandlerProperties> response = new HashMap<>();
+    List<HandlerProperties> response = new ArrayList<>();
 
     for(ISubscriptionHandler handler : subscriptionHandlers){
-      response.put(handler.getSubscriptionName(), handler.getSubscriptionProperties());
+      HandlerProperties props = handler.getSubscriptionProperties();
+      props.setHandlerName(handler.getSubscriptionName());
+      response.add(props);
+     // response.put(handler.getSubscriptionName(), handler.getSubscriptionProperties());
     }
 
     return ResponseEntity.ok(response);

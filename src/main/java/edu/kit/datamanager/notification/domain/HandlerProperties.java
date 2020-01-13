@@ -15,17 +15,23 @@
  */
 package edu.kit.datamanager.notification.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import lombok.Data;
 
 /**
  *
  * @author jejkal
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
 public class HandlerProperties{
 
-  private final Map<String, String> properties = new HashMap<>();
+  private String handlerName;
+  private Map<String, String> properties = new HashMap<>();
 
   HandlerProperties(){
   }
@@ -39,10 +45,12 @@ public class HandlerProperties{
     return this;
   }
 
+  @JsonIgnore
   public Set<String> getKeys(){
     return properties.keySet();
   }
 
+  @JsonIgnore
   public String getDescription(String key){
     return properties.get(key);
   }

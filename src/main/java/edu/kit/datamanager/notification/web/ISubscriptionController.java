@@ -54,6 +54,6 @@ public interface ISubscriptionController extends IGenericResourceController<Subs
   @ApiOperation(value = "Get all handler names and required properties.")
   @RequestMapping(value = "/handlers", method = RequestMethod.GET)
   @ResponseBody
-  ResponseEntity<Map<String, HandlerProperties>> getSubscriptionHandlerNamesAndProperties();
+  ResponseEntity getSubscriptionHandlerNamesAndProperties();
 
 }

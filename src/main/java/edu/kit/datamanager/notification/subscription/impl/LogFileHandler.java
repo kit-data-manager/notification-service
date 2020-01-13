@@ -19,8 +19,6 @@ import edu.kit.datamanager.notification.domain.HandlerProperties;
 import edu.kit.datamanager.notification.domain.Notification;
 import edu.kit.datamanager.notification.domain.Subscription;
 import edu.kit.datamanager.notification.subscription.ISubscriptionHandler;
-import static edu.kit.datamanager.notification.subscription.impl.EmailHandler.DETAILS_KEY;
-import static edu.kit.datamanager.notification.subscription.impl.EmailHandler.EMAIL_KEY;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
