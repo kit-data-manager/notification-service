@@ -21,8 +21,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import edu.kit.datamanager.util.json.CustomInstantDeserializer;
 import edu.kit.datamanager.util.json.CustomInstantSerializer;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.Instant;
 import javax.persistence.Entity;
@@ -39,7 +38,7 @@ import lombok.Data;
  */
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
-@ApiModel(description = "Notification element")
+@Schema(description = "Notification element")
 @Data
 public class Notification implements Serializable{
 
@@ -56,29 +55,29 @@ public class Notification implements Serializable{
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  @ApiModelProperty(value = "The notification severity.", required = true)
+  @Schema(description = "The notification severity.", required = true)
   @Enumerated(EnumType.STRING)
   private SEVERITY severity;
-  @ApiModelProperty(value = "The id of the receipient, which can be a userId or a generic system user id.", required = true)
+  @Schema(description = "The id of the receipient, which can be a userId or a generic system user id.", required = true)
   private String receipientId;
-  @ApiModelProperty(value = "The notification content.", required = true)
+  @Schema(description = "The notification content.", required = true)
   private String content;
-  @ApiModelProperty(value = "The date the notification was created.", example = "2017-05-10T10:41:00Z", required = true)
+  @Schema(description = "The date the notification was created.", example = "2017-05-10T10:41:00Z", required = true)
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
   @JsonDeserialize(using = CustomInstantDeserializer.class)
   @JsonSerialize(using = CustomInstantSerializer.class)
   private Instant createdAt;
-  @ApiModelProperty(value = "The date the notification expired, e.g. can be deleted.", example = "2017-05-10T10:41:00Z", required = true)
+  @Schema(description = "The date the notification expired, e.g. can be deleted.", example = "2017-05-10T10:41:00Z", required = true)
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
   @JsonDeserialize(using = CustomInstantDeserializer.class)
   @JsonSerialize(using = CustomInstantSerializer.class)
   private Instant expiresAt;
-  @ApiModelProperty(value = "The sender type, e.g. another user or the system.", required = true)
+  @Schema(description = "The sender type, e.g. another user or the system.", required = true)
   @Enumerated(EnumType.STRING)
   private SENDER_TYPE senderType;
-  @ApiModelProperty(value = "The sender id, e.g. a user id or a system/service id.", required = true)
+  @Schema(description = "The sender id, e.g. a user id or a system/service id.", required = true)
   private String senderId;
-  @ApiModelProperty(value = "A flag for marking the notification as read.", required = false)
+  @Schema(description = "A flag for marking the notification as read.", required = false)
   private Boolean recognized;
 
 }

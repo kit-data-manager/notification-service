@@ -17,12 +17,10 @@ package edu.kit.datamanager.notification.web;
 
 import com.github.fge.jsonpatch.JsonPatch;
 import edu.kit.datamanager.controller.IGenericResourceController;
-import edu.kit.datamanager.notification.domain.HandlerProperties;
 import edu.kit.datamanager.notification.domain.Subscription;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import java.time.Instant;
 import java.util.List;
-import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -40,18 +38,18 @@ import org.springframework.web.util.UriComponentsBuilder;
 public interface ISubscriptionController extends IGenericResourceController<Subscription>{
 
   @Override
-  @ApiOperation(value = "", hidden = true)
+  @Operation(summary = "", hidden = true)
   default ResponseEntity patch(String string, JsonPatch jp, WebRequest wr, HttpServletResponse hsr){
     return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
   }
 
   @Override
-  @ApiOperation(value = "", hidden = true)
+  @Operation(summary = "", hidden = true)
   default ResponseEntity<List<Subscription>> findByExample(Subscription c, Instant instnt, Instant instnt1, Pageable pgbl, WebRequest wr, HttpServletResponse hsr, UriComponentsBuilder ucb){
     return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
   }
 
-  @ApiOperation(value = "Get all handler names and required properties.")
+  @Operation(summary = "Get all handler names and required properties.")
   @RequestMapping(value = "/handlers", method = RequestMethod.GET)
   @ResponseBody
   ResponseEntity getSubscriptionHandlerNamesAndProperties();

@@ -24,8 +24,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import edu.kit.datamanager.util.json.CustomInstantDeserializer;
 import edu.kit.datamanager.util.json.CustomInstantSerializer;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.IOException;
 import java.io.Serializable;
 import java.time.Instant;
@@ -46,7 +45,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
-@ApiModel(description = "Subscription element")
+@Schema(description = "Subscription element")
 @Data
 public class Subscription implements Serializable{
 
@@ -58,26 +57,26 @@ public class Subscription implements Serializable{
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  @ApiModelProperty(value = "The subscription name, e.g. the unique name of the subscription.", required = true)
+  @Schema(description = "The subscription name, e.g. the unique name of the subscription.", required = true)
   private String subscriptionName;
-  @ApiModelProperty(value = "The receipient id, e.g. the receipientId of a notification matching this subscription.", required = true)
+  @Schema(description = "The receipient id, e.g. the receipientId of a notification matching this subscription.", required = true)
   private String receipientId;
-  @ApiModelProperty(value = "JSON-serialized map of subscription-specific properties.", required = false)
+  @Schema(description = "JSON-serialized map of subscription-specific properties.", required = false)
   private String subscriptionProperties;
-  @ApiModelProperty(value = "The frequency this subscription provides events.", required = false)
+  @Schema(description = "The frequency this subscription provides events.", required = false)
   @Enumerated(EnumType.STRING)
   private FREQUENCY frequency;
-  @ApiModelProperty(value = "The last timestamp when this subscription was fired sending at least one notification.", required = false)
+  @Schema(description = "The last timestamp when this subscription was fired sending at least one notification.", required = false)
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
   @JsonDeserialize(using = CustomInstantDeserializer.class)
   @JsonSerialize(using = CustomInstantSerializer.class)
   private Instant firedLast;
-  @ApiModelProperty(value = "The next timestamp this subscription will fire.", required = false)
+  @Schema(description = "The next timestamp this subscription will fire.", required = false)
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
   @JsonDeserialize(using = CustomInstantDeserializer.class)
   @JsonSerialize(using = CustomInstantSerializer.class)
   private Instant firesNext;
-  @ApiModelProperty(value = "Flag to disable the subscription, e.g. temporarily.", required = false)
+  @Schema(description = "Flag to disable the subscription, e.g. temporarily.", required = false)
   private Boolean disabled;
 
   @JsonIgnore

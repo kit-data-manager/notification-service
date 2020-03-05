@@ -64,7 +64,6 @@ dependencies {
    implementation("org.springframework.boot:spring-boot-starter-mail") 
    
    implementation("org.javers:javers-spring-boot-starter-sql:3.9.0")
-   implementation("io.springfox:springfox-swagger-ui:3.0.0-SNAPSHOT")
    
    implementation("edu.kit.datamanager:service-base:0.1")
    implementation("edu.kit.datamanager:generic-message-consumer:0.1.0")

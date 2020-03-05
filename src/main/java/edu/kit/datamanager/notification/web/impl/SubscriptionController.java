@@ -15,21 +15,17 @@
  */
 package edu.kit.datamanager.notification.web.impl;
 
-import edu.kit.datamanager.exceptions.BadArgumentException;
 import edu.kit.datamanager.notification.dao.ISubscriptionDao;
 import edu.kit.datamanager.notification.domain.HandlerProperties;
 import edu.kit.datamanager.notification.domain.Subscription;
 import edu.kit.datamanager.notification.subscription.ISubscriptionHandler;
 import edu.kit.datamanager.notification.web.ISubscriptionController;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiParam;
-import java.io.IOException;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.net.URI;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -53,7 +49,7 @@ import org.springframework.web.util.UriComponentsBuilder;
  */
 @Controller
 @RequestMapping(value = "/api/v1/subscriptions")
-@Api(value = "Notification Subscription Management")
+@Schema(description = "Notification Subscription Management")
 public class SubscriptionController implements ISubscriptionController{
 
   @Autowired
@@ -150,8 +146,8 @@ public class SubscriptionController implements ISubscriptionController{
 
   @Override
   public ResponseEntity<List<Subscription>> findAll(
-          @ApiParam(hidden = true) @RequestParam(name = "from", required = false) Instant instnt,
-          @ApiParam(hidden = true) @RequestParam(name = "until", required = false) Instant instnt1,
+          @Parameter(hidden = true) @RequestParam(name = "from", required = false) Instant instnt,
+          @Parameter(hidden = true) @RequestParam(name = "until", required = false) Instant instnt1,
           Pageable pgbl,
           WebRequest request,
           HttpServletResponse response,
@@ -250,7 +246,7 @@ public class SubscriptionController implements ISubscriptionController{
       HandlerProperties props = handler.getSubscriptionProperties();
       props.setHandlerName(handler.getSubscriptionName());
       response.add(props);
-     // response.put(handler.getSubscriptionName(), handler.getSubscriptionProperties());
+      // response.put(handler.getSubscriptionName(), handler.getSubscriptionProperties());
     }
 
     return ResponseEntity.ok(response);

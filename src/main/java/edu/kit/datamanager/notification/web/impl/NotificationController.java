@@ -24,8 +24,8 @@ import edu.kit.datamanager.notification.dao.spec.NotificationSenderTypeSpec;
 import edu.kit.datamanager.notification.dao.spec.NotificationSeveritySpec;
 import edu.kit.datamanager.notification.domain.Notification;
 import edu.kit.datamanager.notification.web.INotificationController;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
@@ -54,7 +54,7 @@ import org.springframework.web.util.UriComponentsBuilder;
  */
 @Controller
 @RequestMapping(value = "/api/v1/notifications")
-@Api(value = "Notification Management")
+@Schema(description = "Notification Management")
 public class NotificationController implements INotificationController{
 
   @Autowired
@@ -78,7 +78,7 @@ public class NotificationController implements INotificationController{
 
   @Override
   public ResponseEntity<List<Notification>> create(
-          @ApiParam(value = "The properties of the collection.", required = true) @Valid @RequestBody List<Notification> content,
+          @Parameter(description = "The properties of the collection.", required = true) @Valid @RequestBody List<Notification> content,
           WebRequest request,
           HttpServletResponse response){
     LOG.trace("Calling create({}).", content);
@@ -144,7 +144,7 @@ public class NotificationController implements INotificationController{
   }
 
   @Override
-  public ResponseEntity<List<Notification>> findByExample(@ApiParam(value = "Json representation of the resource serving as example for the search operation. Typically, only first level primitive attributes are evaluated while building queries from examples.", required = true) @RequestBody Notification notification,
+  public ResponseEntity<List<Notification>> findByExample(@Parameter(description = "Json representation of the resource serving as example for the search operation. Typically, only first level primitive attributes are evaluated while building queries from examples.", required = true) @RequestBody Notification notification,
           @RequestParam(name = "from", required = false) final Instant createdFrom,
           @RequestParam(name = "until", required = false) final Instant createdUntil,
           Pageable pgbl,
@@ -172,8 +172,8 @@ public class NotificationController implements INotificationController{
 
   @Override
   public ResponseEntity<Notification> setNotificationRecognized(
-          @ApiParam(value = "Identifier for the notification", required = true) @PathVariable("id") String id,
-          @ApiParam(value = "New value for recognized (either true or false).", required = true, defaultValue = "TRUE") @Valid @RequestBody Boolean status
+          @Parameter(description = "Identifier for the notification", required = true) @PathVariable("id") String id,
+          @Parameter(description = "New value for recognized (either true or false).", required = true, example = "TRUE") @Valid @RequestBody Boolean status
   ){
     LOG.trace("Calling setNotificationRecognized({}, {}).", id, status);
 
