@@ -5,3 +5,4 @@
 /.settings/
 /lib/
 /config/
+**/application.properties
