@@ -18,6 +18,7 @@ package edu.kit.datamanager.notification.util;
 import edu.kit.datamanager.notification.domain.Notification;
 import edu.kit.datamanager.notification.domain.Notification.SEVERITY;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 /**
  *
@@ -29,7 +30,7 @@ public class NotificationTestUtil{
   }
 
   public static Notification createNotification(SEVERITY severity, String content){
-    return createNotification(severity, content, Instant.now());
+    return createNotification(severity, content, Instant.now().truncatedTo( ChronoUnit.MILLIS ));
   }
 
   public static Notification createNotification(SEVERITY severity, String content, Instant creationDate){

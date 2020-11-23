@@ -17,6 +17,7 @@ package edu.kit.datamanager.notification.domain;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.Assert;
@@ -33,8 +34,8 @@ public class SubscriptionTest{
     Subscription s = new Subscription();
     s.setId(1l);
     s.setDisabled(Boolean.FALSE);
-    s.setFiredLast(Instant.now());
-    s.setFiresNext(Instant.now());
+    s.setFiredLast(Instant.now().truncatedTo( ChronoUnit.MILLIS ));
+    s.setFiresNext(Instant.now().truncatedTo( ChronoUnit.MILLIS ));
     s.setFrequency(Subscription.FREQUENCY.HOURLY);
     s.setReceipientId("someone");
     s.setSubscriptionName("sub1");

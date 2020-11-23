@@ -15,13 +15,14 @@
  */
 package edu.kit.datamanager.notification.messaging;
 
-import edu.kit.datamanager.messaging.client.handler.IMessageHandler;
 import edu.kit.datamanager.notification.dao.INotificationDao;
 import edu.kit.datamanager.notification.domain.Notification;
 import edu.kit.datamanager.notification.domain.messaging.NotificationMessage;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import org.aspectj.bridge.IMessageHandler;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,7 +52,7 @@ public class NotificationMessageHandlerTest{
     NotificationMessageHandler handler = new NotificationMessageHandler(dao);
 
     Assert.assertTrue(handler.configure());
-    final NotificationMessage msg = NotificationMessage.createMessage(NotificationMessage.ACTION.CREATE, "me", "A test", Notification.SEVERITY.INFO, "someone", Notification.SENDER_TYPE.USER, "me", Instant.now());
+    final NotificationMessage msg = NotificationMessage.createMessage(NotificationMessage.ACTION.CREATE, "me", "A test", Notification.SEVERITY.INFO, "someone", Notification.SENDER_TYPE.USER, "me", Instant.now().truncatedTo( ChronoUnit.MILLIS ));
 
     Mockito.when(dao.save(Mockito.any())).then((iom) -> {
       Notification n = iom.getArgument(0);

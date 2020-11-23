@@ -110,7 +110,7 @@ public class SubscriptionProcessor{
     for(Entry<String, List<Subscription>> entry : subscriptionMap.entrySet()){
       List<Subscription> subscriptionsByReceipient = entry.getValue();
       for(Subscription subscription : subscriptionsByReceipient){
-        if(subscription.getFiresNext() != null && subscription.getFiresNext().isAfter(Instant.now())){
+        if(subscription.getFiresNext() != null && subscription.getFiresNext().isAfter(Instant.now().truncatedTo( ChronoUnit.MILLIS ))){
           LOGGER.trace("Subscription {} is not fired before {}. Continue.", subscription.getFiresNext());
           continue;
         }
@@ -126,17 +126,17 @@ public class SubscriptionProcessor{
             if(handler.handleNotifications(notifications.toArray(new Notification[]{}), subscription.getSubscriptionPropertiesAsMap())){
               //success
               LOGGER.trace("Successfully submitted {} notifications via subscription {} to {}. Updating subscription timestamps.", notifications.size(), subscription.getSubscriptionName(), subscription.getReceipientId());
-              subscription.setFiredLast(Instant.now());
+              subscription.setFiredLast(Instant.now().truncatedTo( ChronoUnit.MILLIS ));
 
               switch(subscription.getFrequency()){
                 case HOURLY:
-                  subscription.setFiresNext(Instant.now().plus(1, ChronoUnit.HOURS));
+                  subscription.setFiresNext(Instant.now().truncatedTo( ChronoUnit.MILLIS ).plus(1, ChronoUnit.HOURS));
                   break;
                 case DAILY:
-                  subscription.setFiresNext(Instant.now().plus(1, ChronoUnit.DAYS));
+                  subscription.setFiresNext(Instant.now().truncatedTo( ChronoUnit.MILLIS ).plus(1, ChronoUnit.DAYS));
                   break;
                 case LIVE:
-                  subscription.setFiresNext(Instant.now());
+                  subscription.setFiresNext(Instant.now().truncatedTo( ChronoUnit.MILLIS ));
                   break;
               }
             } else{

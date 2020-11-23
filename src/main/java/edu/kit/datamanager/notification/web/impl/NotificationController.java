@@ -27,6 +27,7 @@ import edu.kit.datamanager.notification.web.INotificationController;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -110,7 +111,7 @@ public class NotificationController implements INotificationController{
 
       if(Objects.isNull(notification.getCreatedAt())){
         LOG.trace("Setting notification creation time to now().");
-        notification.setCreatedAt(Instant.now());
+        notification.setCreatedAt(Instant.now().truncatedTo( ChronoUnit.MILLIS ));
       }
 
       LOG.trace("Resetting 'recognized' state.");

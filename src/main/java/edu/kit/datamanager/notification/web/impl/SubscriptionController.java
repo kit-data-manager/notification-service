@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.net.URI;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -113,8 +114,8 @@ public class SubscriptionController implements ISubscriptionController{
       subscription.setDisabled(Boolean.FALSE);
     }
     //setting firedLast and firesNext in order not to send all old notifications in the first cycle
-    subscription.setFiredLast(Instant.now());
-    subscription.setFiresNext(Instant.now());
+    subscription.setFiredLast(Instant.now().truncatedTo( ChronoUnit.MILLIS ));
+    subscription.setFiresNext(Instant.now().truncatedTo( ChronoUnit.MILLIS ));
 
     LOG.trace("Persisting new subscription.");
     subscription = subscriptionDao.save(subscription);

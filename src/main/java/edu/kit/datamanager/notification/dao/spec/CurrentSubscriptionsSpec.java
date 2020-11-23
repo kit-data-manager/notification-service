@@ -17,6 +17,7 @@ package edu.kit.datamanager.notification.dao.spec;
 
 import edu.kit.datamanager.notification.domain.Subscription;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -38,7 +39,7 @@ public class CurrentSubscriptionsSpec{
   public static Specification<Subscription> toSpecification(final List<String> endorsedSubscriptionNames){
 
     return (Root<Subscription> root, CriteriaQuery<?> query, CriteriaBuilder builder) -> {
-      return builder.and(builder.or(builder.lessThanOrEqualTo(root.get("firesNext"), Instant.now()), root.get("firesNext").isNull()), root.get("subscriptionName").in(endorsedSubscriptionNames));
+      return builder.and(builder.or(builder.lessThanOrEqualTo(root.get("firesNext"), Instant.now().truncatedTo( ChronoUnit.MILLIS )), root.get("firesNext").isNull()), root.get("subscriptionName").in(endorsedSubscriptionNames));
     };
   }
 }

@@ -19,6 +19,7 @@ import edu.kit.datamanager.notification.domain.messaging.NotificationMessage;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -30,7 +31,7 @@ public class NotificationMessageTest{
 
   @Test
   public void testCreateNotificationMessage(){
-    Instant t = Instant.now();
+    Instant t = Instant.now().truncatedTo( ChronoUnit.MILLIS );
     NotificationMessage msg = NotificationMessage.createMessage(NotificationMessage.ACTION.CREATE, "me", "A test", Notification.SEVERITY.INFO, "someone", Notification.SENDER_TYPE.USER, "me", t);
 
     Assert.assertEquals("notification", msg.getEntityName());
